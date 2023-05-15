@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Symbol</title>
+</head>
+<body>
+<!--
+    前言：ES5 中对象的属性名都是字符串，容易造成重名，污染环境
+    Symbol：
+    概念：ES6 中的添加了一种原始数据类型 symbol(已有的原始数据类型：String, Number, boolean, null, undefined, 对象)
+    特点：
+      1、Symbol 属性值对应的值是唯一的，解决命名冲突问题
+      2、Symbol 值不能与其他数据进行计算，包括同字符串拼串
+      3、for in, for of 遍历时不会遍历 symbol 属性。
+    使用：
+      1、调用 Symbol 函数得到 symbol 值
+         let symbol = Symbol();
+         let obj = {};
+         obj[symbol] = 'hello';
+      2、传参标识
+         let symbol = Symbol('one');
+         let symbol2 = Symbol('two');
+         console.log(symbol);// Symbol('one')
+         console.log(symbol2);// Symbol('two')
+      3、内置 Symbol 值
+         * 除了定义自己使用的 Symbol 值以外，ES6 还提供了 11 个内置的 Symbol 值，指向语言内部使用的方法。
+         - Symbol.iterator
+         * 对象的 Symbol.iterator 属性，指向该对象的默认遍历器方法(后边讲)
+
+-->
+
+
+<script type="text/javascript">
+    // 创建 symbol 属性值
+    let symbol = Symbol();
+    console.log(symbol);
+    let obj = {username: 'chen', age: 26};
+    obj.sex = '男';
+    obj[symbol] = 'hello';
+    console.log(obj);
+    // for in , for of 不能遍历 symbol 属性
+    for (let i in obj) {
+        console.log(i);
+    }
+
+    let symbol2 = Symbol('a');
+    let symbol3 = Symbol('b');
+    console.log(symbol2 === symbol3);
+    console.log(symbol2, symbol3);
+
+    // Symbol.for 创建
+    let symbol5 = Symbol('c');
+    let symbol6 = Symbol('c');
+
+    // 可以去定义常量
+    const Person_key = Symbol('person_key');
+    console.log(Person_key);
+
+</script>
+
+</body>
+</html>

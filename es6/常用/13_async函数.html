@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>async 函数</title>
+</head>
+<body>
+
+<!--
+  async 函数(源自 ES2017)
+  概念： 真正意义上去解决异步回调的问题，同步流程表达异步操作
+  本质： Generator 的语法糖
+  语法：
+      async function foo(){
+        await 异步操作;
+        await 异步操作；
+      }
+  特点：
+    1、不需要像 Generator 去调用 next 方法，遇到 await 等待，当前的异步操作完成就往下执行
+    2、返回的总是 Promise 对象，可以用 then 方法进行下一步操作
+    3、async 取代 Generator 函数的星号*，await 取代 Generator 的 yield
+    4、语意上更为明确，使用简单，经临床验证，暂时没有任何副作用
+
+-->
+<script type="text/javascript" src="./js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript">
+    // async 基本使用
+    async function foo() {
+        return new Promise(resolve => {
+            // setTimeout(() => {
+            //     resolve();
+            // }, 2000)
+            setTimeout(resolve, 2000);
+        });
+    }
+
+    async function test() {
+        console.log('开始执行', new Date().toTimeString());
+        await foo();
+        console.log('执行完毕', new Date().toTimeString());
+    }
+
+    test();
+
+    // async 里 await 返回值
+    function test2() {
+        return 'xxx';
+    }
+
+    async function asyncPrint() {
+        // let result = await test2();
+        let result = await Promise.resolve('promise');
+        console.log(result);
+        result = await Promise.reject('失败了。。。');
+        console.log(result);
+    }
+
+    asyncPrint();
+
+    // 获取新闻内容
+    async function getNews(url) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                method: 'GET',
+                url,
+                success: data => resolve(data),
+                error: error => resolve(false)
+                // success: function (data) {
+                //     resolve();
+                // },
+                // error: function (error) {
+                //     reject();
+                // }
+            });
+        });
+    }
+
+    async function sendXml() {
+        let result = await getNews('http://localhost:30001/news?id=3');
+        console.log(result);
+        if (result) {
+            result = await getNews('http://localhost:3000' + result.commentsUrl);
+            console.log(result);
+        } else {
+            alert('暂时没有新闻推送');
+        }
+    }
+
+    sendXml();
+
+</script>
+
+</body>
+</html>

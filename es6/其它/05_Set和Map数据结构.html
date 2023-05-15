@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Set 和 Map 数据结构</title>
+</head>
+<body>
+<!--
+    1. Set 容器 : 无序不可重复的多个 value 的集合体
+       * Set()
+       * Set(array)
+       * add(value)
+       * delete(value)
+       * has(value)
+       * clear()
+       * size
+    2. Map 容器 : 无序的 key 不重复的多个 key-value 的集合体
+       * Map()
+       * Map(array)
+       * set(key, value) // 添加
+       * get(key)
+       * delete(key)
+       * has(key)
+       * clear()
+       * size
+-->
+
+<script type="text/javascript">
+    let set = new Set([1, 2, 3, 4, 5, 6, 6, 6]);
+    console.log(set);
+    set.add([1, 2, 3, 3, 3]);
+    console.log(set);
+    console.log(set.has(3));
+    console.log(set.has(8));
+    set.clear();
+    console.log(set);
+
+    let arr = [1, 2, 3, 4, 5, 4, 3, 2, 1];
+    // 1. 数组去重
+    let result = [...new Set(arr)];
+    console.log(result);
+    // 2. 交集
+    let arr2 = [4, 5, 6, 5, 6];
+    // let result = [...new Set(arr)].filter(item => {
+    //     let s2 = new Set(arr2); // 4 5 6
+    //     if (s2.has(item)) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // });
+    let result = [...new Set(arr)].filter(item => new Set(arr2).has(item));
+    console.log(result);
+
+    // 3. 并集
+    let union = [...new Set([...arr, ...arr2])];
+    console.log(union);
+
+    // 4. 差集
+    let diff = [...new Set(arr)].filter(item => !(new Set(arr2).has(item)));
+    console.log(diff);
+
+    /************************************************************/
+
+    // 声明 Map
+    let m = new Map();
+
+    // 添加元素
+    m.set('name', '尚硅谷');
+    m.set('change', function () {
+        console.log("我们可以改变你!!");
+    });
+    let key = {
+        school: 'ATGUIGU'
+    };
+    m.set(key, ['北京', '上海', '深圳']);
+
+    // size
+    // console.log(m.size);
+
+    // 删除
+    // m.delete('name');
+
+    // 获取
+    // console.log(m.get('change'));
+    // console.log(m.get(key));
+
+    // 清空
+    // m.clear();
+
+    // 遍历
+    for (let v of m) {
+        console.log(v);
+    }
+
+    // console.log(m);
+
+    let map = new Map([['aaa', 'username'], [36, 'age']]);
+    console.log(map);
+    map.set(68, 'haha');
+    console.log(map);
+    map.delete(36);
+    console.log(map);
+</script>
+</body>
+
+</html>

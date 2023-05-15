@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Iterator 遍历器</title>
+</head>
+<body>
+<!--
+    概念： iterator 是一种接口机制，为各种不同的数据结构提供统一的访问机制
+    作用：
+    1、为各种数据结构，提供一个统一的、简便的访问接口；
+    2、使得数据结构的成员能够按某种次序排列
+    3、ES6 创造了一种新的遍历命令 for...of 循环，Iterator 接口主要供 for...of 消费。
+    工作原理：
+    - 创建一个指针对象(遍历器对象)，指向数据结构的起始位置。
+    - 第一次调用 next 方法，指针自动指向数据结构的第一个成员
+    - 接下来不断调用 next 方法，指针会一直往后移动，直到指向最后一个成员
+    - 每调用 next 方法返回的是一个包含 value 和 done 的对象，{value: 当前成员的值,done: 布尔值}
+      * value 表示当前成员的值，done 对应的布尔值表示当前的数据的结构是否遍历结束。
+      * 当遍历结束的时候返回的 value 值是 undefined，done 值为 true
+    原生具备 iterator 接口的数据(可用 for of 遍历)
+    1、Array
+    2、arguments
+    3、set 容器
+    4、map 容器
+    5、String
+    。。。
+-->
+
+<script type="text/javascript">
+
+    // 模拟指针对象(遍历器对象)
+    function myIterator(arr) { // iterator 接口
+        // 记录指针的位置
+        let nextIndex = 0;
+        return { // 遍历器对象
+            next: function () {
+                return {value: arr[nextIndex++], done: nextIndex > arr.length};
+            }
+        }
+    }
+
+    // 准备数据
+    let arr = [1, 3, 6, 'abc'];
+    let iteratorObj = myIterator(arr);
+    console.log(iteratorObj.next());
+    console.log(iteratorObj.next());
+    console.log(iteratorObj.next());
+    console.log(iteratorObj.next());
+    console.log(iteratorObj.next());
+    console.log(iteratorObj.next());
+
+    // 将 iterator 接口部署到指定的数据类型上，可以使用 for of 去循环遍历
+    // 数组、字符串、arguments、set 容器、map 容器
+    for (let i of arr) {
+        console.log(i);
+    }
+
+    let str = 'abcdefg';
+    for (let i of str) {
+        console.log(i);
+    }
+
+    function fun() {
+        for (let i of arguments) {
+            console.log(i);
+        }
+    }
+
+    fun(1, 3, 6, 'a');
+
+    // 对象没有这个接口 obj is not iterable
+    let obj = {username: 'chen', age: 26};
+    // for (let i of obj) {
+    //     console.log(i);
+    // }
+
+    // 等同于在指定的数据结构上部署了 iterator 接口
+    // 当使用 for of 去遍历某一个数据结构的时候，首先去找 Symbol.iterator 找到了就去遍历，没有找到的话不能遍历 xxx is not iterable
+    let targetData = {
+        [Symbol.iterator]: function () {
+            // 记录指针的位置
+            let nextIndex = 0;
+            return { // 遍历器对象
+                next: function () {
+                    return {value: this[nextIndex++], done: nextIndex > this.length};
+                }
+            }
+        },
+        name: 'chen'
+    };
+    // for (let i of targetData) {
+    //     console.log(i);
+    // }
+
+    // 使用三点运算符，解构赋值，默认去调用 iterator 接口
+    let arr2 = [1, 6];
+    let arr3 = [2, 3, 4, 5];
+    arr2 = [1, ...arr3, 6];
+    console.log(arr2);
+    let [a, b] = arr2;
+    console.log(a, b);
+
+</script>
+</body>
+</html>
